@@ -94,6 +94,7 @@ export default {
 
     props.boundary = boundary
     props.id = 'vue-trend-' + this._uid
+    const maskId = `vue-trend-mask-${this._uid}`
     return h(
       'svg', {
         attrs: {
@@ -106,10 +107,24 @@ export default {
         h(Gradient, {
           props
         }),
-        h(Path, {
-          props,
-          ref: 'path'
-        })
+        h('defs', [
+          h('mask', { attrs: { id: maskId } }, [
+            h(Path, { props, ref: 'path' })
+          ])
+        ]),
+        h('g', {
+          attrs: { mask: `url(#${maskId})` }
+        }, [
+          h('rect', {
+            attrs: {
+              x: 0,
+              y: 0,
+              width: '100%',
+              height: '100%',
+              fill: `url(#${props.id})`
+            }
+          })
+        ])
       ]
     )
   }
